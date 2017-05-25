@@ -3,44 +3,31 @@ using System.Collections;
 
 public class BallMovement : MonoBehaviour 
 {
-    private string direction;
-    private float speedTranslation, angle;
+    private Vector3 direction;
+    private float speedTranslation;
 
-	// Use this for initialization
-	void Awake () 
+	void Start () 
     {
-        direction = "right";
-        speedTranslation = 0.1f;
-        angle = 0;
+        direction = Vector3.forward;
+        speedTranslation = 0.2f;
 	}
 	
-	// Update is called once per frame
 	void Update () 
     {
-       MoveBehaviour();
+        MoveBehaviour();
 	}
 
     private void MoveBehaviour()
     {
-        if (direction.Equals("right") && this.transform.localPosition.z >= 24) direction = "up";
-        else if (direction.Equals("up") && this.transform.localPosition.y >= 8) direction = "left";
-        else if (direction.Equals("left") && this.transform.localPosition.z <= 0) direction = "down";
-        else if (direction.Equals("down") && this.transform.localPosition.y <= 0) direction = "right";
+        if (direction.Equals(Vector3.forward) && this.transform.localPosition.z > 24) direction = Vector3.left;
+        else if (direction.Equals(Vector3.left) && this.transform.localPosition.x < -24) direction = Vector3.up;
+        else if (direction.Equals(Vector3.up) && this.transform.localPosition.y > 6) direction = Vector3.back;
+        else if (direction.Equals(Vector3.back) && this.transform.localPosition.z < 0) direction = Vector3.down;
+        else if (direction.Equals(Vector3.down) && this.transform.localPosition.y < 3 && this.transform.localPosition.x < 0) direction = Vector3.right;
+        else if (direction.Equals(Vector3.right) && this.transform.localPosition.x > 0) direction = Vector3.down;
+        else if (direction.Equals(Vector3.down) && this.transform.localPosition.y < 0) direction = Vector3.forward;
 
-        switch (direction)
-        {
-            case "right": Transformations(Vector3.forward, 5.0f); break;
-            case "up":    Transformations(Vector3.up, 0.0f);      break;
-            case "left":  Transformations(Vector3.back, -5.0f);   break;
-            case "down":  Transformations(Vector3.down, 0.0f);    break;
-        }
-    }
-
-    private void Transformations(Vector3 direction, float newAngle)
-    {
         this.transform.localPosition += direction * speedTranslation;
-        angle += newAngle;
-        this.transform.localEulerAngles = new Vector3(angle, 0, 0);
     }
 }
 
